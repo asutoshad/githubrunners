@@ -1,0 +1,60 @@
+
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: fellowship
+      POSTGRES_PASSWORD: fellowship
+      POSTGRES_DB: fellowship
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend1:
+    build:
+      context: ./backend1
+      dockerfile: Dockerfile
+    ports:
+      - "4004:4004"
+    env_file:
+      - ./backend1/.env
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
+  backend2:
+    build:
+      context: ./backend2
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./backend2/.env
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network
+    depends_on:
+      - backend1
+      - backend2
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

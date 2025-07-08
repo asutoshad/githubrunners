@@ -1,0 +1,1 @@
+{"version":3,"file":"knex.js","sourceRoot":"","sources":["../../src/db/knex.ts"],"names":[],"mappings":";;;;;AAAA,gDAAwB;AACxB,0DAAgC;AAGhC,sEAA6C;AAE7C,MAAM,oBAAoB,GAAG,IAAA,yBAAc,EACzC,kBAAM,CAAC,OAAO,CAAC,GAAG,CAAC,QAAQ,IAAI,OAAO,CAAQ,CAC/C,CAAC;AAEF,MAAM,IAAI,GAAG,IAAA,cAAI,EAAC,oBAAoB,CAAC,CAAC;AAExC,kBAAe,IAAI,CAAC"}

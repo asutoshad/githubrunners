@@ -1,0 +1,102 @@
+
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: fellowship
+      POSTGRES_PASSWORD: fellowship
+      POSTGRES_DB: fellowship
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fellowship"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    labels:
+      service.type: provider
+
+  backend1:
+    image: code/backend1
+    ports:
+      - "4004:4004"
+    env_file:
+      - ./backend1/.env
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4004/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+    labels:
+      service.type: provider
+
+  backend2:
+    image: code/backend2
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./backend2/.env
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+    labels:
+      service.type: provider
+
+  frontend:
+    image: code/frontend
+    ports:
+      - "80:80"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend1
+      - backend2
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    labels:
+      service.type: provider
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: overlay
