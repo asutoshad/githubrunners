@@ -1,6 +1,4 @@
 hello
 this is 
 asutosh
-kk
-ab
-ac
+lk
