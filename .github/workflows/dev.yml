@@ -34,8 +34,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies (root)
-        run: npm ci
 
       - name: Bump version (patch)
         run: |
