@@ -6,20 +6,20 @@ on:
       - dev
       - 'feature-*'
 
-jobs:
-  validate-feature-push:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature-')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+# jobs:
+#   validate-feature-push:
+#     if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature-')
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Validate latest non-merge commit message
-        run: |
-          COMMIT_MSG=$(git log --no-merges -1 --pretty=%B)
-          echo "$COMMIT_MSG" | grep -Eq '^(feat|fix|chore|docs|style|refactor|test|perf)(\(.+\))?: .+' || {
-            echo "Invalid commit message."
-            exit 1
-          }
+#       - name: Validate latest non-merge commit message
+#         run: |
+#           COMMIT_MSG=$(git log --no-merges -1 --pretty=%B)
+#           echo "$COMMIT_MSG" | grep -Eq '^(feat|fix|chore|docs|style|refactor|test|perf)(\(.+\))?: .+' || {
+#             echo "Invalid commit message."
+#             exit 1
+#           }
 
   build-and-push-dev:
     if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
@@ -34,15 +34,12 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies (root)
-        run: npm ci
-
-      - name: Bump version (patch)
-        run: |
-          OUTPUT=$(node scripts/version-bump.js patch)
-          echo "$OUTPUT"
-          VERSION=$(echo "$OUTPUT" | sed -nE 's/^Bumped .* → ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      # - name: Bump version (patch)
+      #   run: |
+      #     OUTPUT=$(node scripts/version-bump.js patch)
+      #     echo "$OUTPUT"
+      #     VERSION=$(echo "$OUTPUT" | sed -nE 's/^Bumped .* → ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')
+      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

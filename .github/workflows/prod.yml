@@ -29,23 +29,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Bump version (minor)
-        run: |
-          OUTPUT=$(node scripts/version-bump.js minor)
-          echo "$OUTPUT"
-          VERSION=$(echo "$OUTPUT" | sed -nE 's/^Bumped .* → ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      # - name: Bump version (minor)
+      #   run: |
+      #     OUTPUT=$(node scripts/version-bump.js minor)
+      #     echo "$OUTPUT"
+      #     VERSION=$(echo "$OUTPUT" | sed -nE 's/^Bumped .* → ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')
+      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
 
 
-      - name: Tag and push version to GitHub
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add VERSION
-          git commit -m "chore(release): bump to v${VERSION}"
-          git tag v${VERSION}
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} v${VERSION}
+      # - name: Tag and push version to GitHub
+      #   run: |
+      #     git config user.name "github-actions"
+      #     git config user.email "github-actions@github.com"
+      #     git add VERSION
+      #     git commit -m "chore(release): bump to v${VERSION}"
+      #     git tag v${VERSION}
+      #     git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD
+      #     git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} v${VERSION}
 
 
 
